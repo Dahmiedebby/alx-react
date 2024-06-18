@@ -1,55 +1,62 @@
-import React, { useContext } from 'react';
-import logo from '../assets/holberton_logo.jpg';
-import { StyleSheet, css } from 'aphrodite';
-import { AppContext } from '../App/AppContext';
+import React, { Component } from "react";
+import holberton_logo from "../assets/holberton_logo.jpg";
+import { StyleSheet, css } from "aphrodite";
+import AppContext from "../App/AppContext";
 
-function Header() {
-  const { user, logOut } = useContext(AppContext);
+class Header extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-  return (
-    <>
-      <header className={css(headerStyles.appHeader)}>
-        <img src={logo} alt="logo" className={css(headerStyles.appLogo)}/>
-        <h1 className={css(headerStyles.h1)}>School dashboard</h1>
-      </header>
+  render() {
+    const { user, logOut } = this.context;
 
-      {
-      user.isLoggedIn && <section id="logoutSection">
-        <h2>Welcome<strong> {user.email} </strong><em><a href="#" onClick={logOut}>(logout)</a></em>
-        </h2>
-      </section>
-      }
-    </>
-  );
+    return (
+      <div className={css(styles.header)}>
+        <img src={holberton_logo} className={css(styles.headerImg)} />
+        <h1>School dashboard</h1>
+
+        {user.isLoggedIn && (
+          <p id="logoutSection" className={css(styles.logoutSection)}>
+            Welcome <b>{`${user.email} `}</b>
+            <span onClick={logOut} className={css(styles.logoutSectionSpan)}>
+              (logout)
+            </span>
+          </p>
+        )}
+      </div>
+    );
+  }
 }
 
-const headerStyles = StyleSheet.create({
-	h1: {
-		marginLeft: '10rem',
-    float: 'right',
-    flex: 2,
-    '@media (max-width: 900px)': {
-      margin: 'auto'
-    }
-	},
+const cssVars = {
+  mainColor: "#e01d3f",
+};
 
-	appHeader: {
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
-		color: '#E11D3F',
-		borderBottom: '1px solid #E11D3F',
-    width: '100%',
-    boxSizing: 'border-box'
-	},
+const styles = StyleSheet.create({
+  header: {
+    display: "flex",
+    alignItems: "center",
+    color: cssVars.mainColor,
+    fontSize: "20px",
+  },
 
-	appLogo: {
-		maxHeight: '200px',
-		maxWidth: '200px',
-    height: 'auto',
-    width: 'auto',
-    flex: 1
-	}
+  headerImg: {
+    width: "200px",
+  },
+  logoutSection: {
+    color: "black",
+    position: "absolute",
+    right: 0,
+    paddingRight: "20px",
+    alignSelf: "flex-end",
+  },
+  logoutSectionSpan: {
+    fontStyle: "italic",
+    cursor: "pointer",
+  },
 });
+
+Header.contextType = AppContext;
 
 export default Header;
